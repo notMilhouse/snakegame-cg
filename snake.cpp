@@ -42,7 +42,7 @@ class GamePos {
     private:
         int posX;
         int posY;
-}
+};
 
 class Direction {
     public:
@@ -74,16 +74,15 @@ class Direction {
     private:
         short dirX;
         short dirY;
-}
-
+};
 
 class BodyPart {
     public:
         void appendPart();
     private:
         GamePos pos;
-        BodyPart nextPart;
-}
+        BodyPart *nextPart;
+};
 
 class Snake {
     public:
@@ -101,4 +100,4 @@ class Snake {
         BodyPart head;
         Direction currentDirection;
     
-}
+};
