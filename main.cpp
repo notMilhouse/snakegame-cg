@@ -1,16 +1,14 @@
 /*
-g++ main.cpp -o vai -lglut -lGL -lGLEW -lGLU
+g++ *.cpp -o vai -lglut -lGL -lGLEW -lGLU
 */
-
+#include "display.hpp"
 #include <GL/freeglut_std.h>
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include "snake.cpp"
-#include "display.cpp"
 
 void KeyboardManage(unsigned char key, int x, int y);
 void Timer(int value);
-void Initialize();
 void DrawManage();
 void Margem(int windowX, int windowY);
 
@@ -22,7 +20,7 @@ int main(int argc, char**argv)
     //---
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(500, 500);
+    glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT  );
     glutInitWindowPosition(430, 130);
     glutCreateWindow("snake_game");
     //---
@@ -43,7 +41,7 @@ int main(int argc, char**argv)
 void DrawManage()
 {
     //snake->draw();
-    Margem(500, 500);
+    chess();
 }
 
 void KeyboardManage(unsigned char key, int x, int y)
@@ -69,28 +67,4 @@ void KeyboardManage(unsigned char key, int x, int y)
             snake->changeDirection(Direction());
             break;
     }
-}
-
-void Margem(int windowX, int windowY)
-{
-    glViewport(0, 0, windowX, windowY);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glColor3f(0.0, 0.0, 0.0);
-    glBegin(GL_POLYGON);
-    glVertex2i(0, 0);
-    glVertex2i(0, 500);
-    glVertex2i(500, 500);
-    glVertex2i(0, 500);
-    glEnd();
-
-    glColor3f(1.0, 1.0, 1.0);
-    glBegin(GL_POLYGON);
-    glVertex2i(10, 10);
-    glVertex2i(10, 490);
-    glVertex2i(490, 490);
-    glVertex2i(10, 490);
-    glEnd();
-
-    glFlush();
 }
