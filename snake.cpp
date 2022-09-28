@@ -1,103 +1,68 @@
-class GamePos {
+#include "gamefeatures.cpp"
+
+class BodyPart : public GameObject{
     public:
-        GamePos() {
-            posX = 15;
-            posY = 15;
+        BodyPart(GamePos p, Direction d):GameObject(p, d)
+        {
+            nextPart = 0;
+        }
+        BodyPart* getNextPart()
+        {
+            return nextPart;
         }
 
-        GamePos(int x, int y) {
-            posX = x;
-            posY = y;
-        }
-
-        void setPos(int x, int y) {
-            posX = x;
-            posY = y;
-        }
-
-        int getX() {
-            return posX;
-        }
-
-        int getY() {
-            return posY;
-        }
-
-        void incrementX() {
-            posX++;
-        }
-
-        void incrementY() {
-            posY++;
-        }
-
-        void incrementX(int increment) {
-            posX += increment;
-        }
-
-        void incrementY(int increment) {
-            posY += increment;
-        }
-    
-    private:
-        int posX;
-        int posY;
-};
-
-class Direction {
-    public:
-        Direction() {
-            dirX = 1;
-            dirY = 0;
-        }
-
-        void toUp() {
-            dirX = 0;
-            dirY = 1;
-        }
-
-        void toDown() {
-            dirX = 0;
-            dirY = -1;
-        }
-
-        void toLeft() {
-            dirX = -1;
-            dirY = 0;
-        }
-
-        void toRight() {
-            dirX = 1;
-            dirY = 0;
+        void appendPart(BodyPart n)
+        {
+            nextPart = &n;
         }
 
     private:
-        short dirX;
-        short dirY;
-};
-
-class BodyPart {
-    public:
-        void appendPart();
-    private:
-        GamePos pos;
         BodyPart *nextPart;
 };
 
 class Snake {
     public:
+
+        Snake(GamePos p, Direction d)
+        {
+            head = new BodyPart(p, d);
+            tail = head;
+        }
+
         void move() {
+            BodyPart *aux = tail;
+            tail = tail->getNextPart();
+            delete aux;
+            
+            GamePos newPos = head->getPos(); 
 
+            if(currentDirection.isToDown()) newPos.incrementY();
+            if(currentDirection.isToUp()) newPos.decrementY();
+            if(currentDirection.isToLeft()) newPos.decrementX();
+            if(currentDirection.isToRigth()) newPos.incrementX();
+
+            aux = new BodyPart(newPos, currentDirection);
+            aux->appendPart(*head);
+            head = aux;            
         }
 
-        void draw() {
-
+        void changeDirection(Direction newDirection)
+        {
+            currentDirection = newDirection;
         }
 
-        GamePos getPos();
+        void draw(void (*callback)(int x, int y)) 
+        {
+            BodyPart*current = head;
+            GamePos pos;
+            while (current!=0) {
+                pos = current->getPos();
+                callback(pos.getX(), pos.getY());                
+            }
+        }
 
     private:
-        BodyPart head;
-        Direction currentDirection;
-    
+        BodyPart *head;
+        BodyPart *tail;
+        Direction currentDirection;  
 };
