@@ -43,7 +43,23 @@ class Snake {
 
             aux = new BodyPart(newPos, currentDirection);
             aux->appendPart(*head);
-            head = aux;            
+            head = aux;
+        }
+
+        void removePart()
+        {
+            BodyPart* aux = tail;
+
+            if(head == tail)
+            {
+                tail = head = nullptr;
+            }
+            else 
+            {
+                tail = tail->getNextPart();
+            }
+            
+            delete aux;
         }
 
         void changeDirection(Direction newDirection)
@@ -53,11 +69,11 @@ class Snake {
 
         void draw(void (*callback)(int x, int y)) 
         {
-            BodyPart*current = head;
+            BodyPart*current = tail;
             GamePos pos;
             while (current!=0) {
                 pos = current->getPos();
-                callback(pos.getX(), pos.getY());                
+                callback(pos.getX(), pos.getY());          
             }
         }
 
