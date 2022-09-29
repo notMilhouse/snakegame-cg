@@ -1,68 +1,70 @@
 #include "gamefeatures.cpp"
 
-class BodyPart : public GameObject{
-    public:
-        BodyPart(GamePos p, Direction d):GameObject(p, d)
-        {
-            nextPart = 0;
-        }
-        BodyPart* getNextPart()
-        {
-            return nextPart;
-        }
+class BodyPart : public GameObject
+{
+public:
+    BodyPart(GamePos p, Direction d) : GameObject(p, d)
+    {
+        nextPart = nullptr;
+    }
 
-        void appendPart(BodyPart n)
-        {
-            nextPart = &n;
-        }
+    BodyPart *getNextPart()
+    {
+        return nextPart;
+    }
 
-    private:
-        BodyPart *nextPart;
+    void appendPart(BodyPart* n)
+    {
+        nextPart = n;
+    }
+
+private:
+    BodyPart *nextPart;
 };
 
-class Snake {
-    public:
+class Snake
+{
+public:
+    Snake(GamePos p, Direction d)
+    {
+        head = new BodyPart(p, d);
+        tail = head;
+    }
 
-        Snake(GamePos p, Direction d)
+    void move()
+    {
+        BodyPart *aux = tail;
+        tail = tail->getNextPart();
+        delete aux;
+
+        GamePos headCurrentPosition = head->getPos();
+        Direction headCurrentDirection = head->getDir();
+
+        aux = new BodyPart(headCurrentPosition, headCurrentDirection);
+        aux->appendPart(*head);
+        head = aux;
+    }
+
+    void draw(void (*callback)(int x, int y))
+    {
+        BodyPart *current = head;
+        GamePos pos;
+        while (current != 0)
         {
-            head = new BodyPart(p, d);
-            tail = head;
+            pos = current->getPos();
+            callback(pos.getX(), pos.getY());
         }
+    }
 
-        void move() {
-            BodyPart *aux = tail;
-            tail = tail->getNextPart();
-            delete aux;
-            
-            GamePos newPos = head->getPos(); 
+private:
+    BodyPart *head;
+    BodyPart *tail;
 
-            if(currentDirection.isToDown()) newPos.incrementY();
-            if(currentDirection.isToUp()) newPos.decrementY();
-            if(currentDirection.isToLeft()) newPos.decrementX();
-            if(currentDirection.isToRigth()) newPos.incrementX();
+    void addHead()
+    {
+        BodyPart *part = new BodyPart(head->getPos(), head->getDir());
 
-            aux = new BodyPart(newPos, currentDirection);
-            aux->appendPart(*head);
-            head = aux;            
-        }
-
-        void changeDirection(Direction newDirection)
-        {
-            currentDirection = newDirection;
-        }
-
-        void draw(void (*callback)(int x, int y)) 
-        {
-            BodyPart*current = head;
-            GamePos pos;
-            while (current!=0) {
-                pos = current->getPos();
-                callback(pos.getX(), pos.getY());                
-            }
-        }
-
-    private:
-        BodyPart *head;
-        BodyPart *tail;
-        Direction currentDirection;  
+        head->appendPart(part);
+        head = part;
+    }
 };

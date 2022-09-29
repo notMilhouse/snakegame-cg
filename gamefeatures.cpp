@@ -23,14 +23,6 @@ class GamePos {
             return posY;
         }
 
-        void incrementX() {
-            posX++;
-        }
-
-        void incrementY() {
-            posY++;
-        }
-
         void incrementX(int increment) {
             posX += increment;
         }
@@ -38,26 +30,17 @@ class GamePos {
         void incrementY(int increment) {
             posY += increment;
         }
-
-        void decrementX() {
-            posX--;
-        }
-
-        void decrementY() {
-            posY--;
-        }
-
-        void decrementX(int increment) {
-            posX -= increment;
-        }
-
-        void decrementY(int increment) {
-            posY -= increment;
-        }
     
     private:
         int posX;
         int posY;
+};
+
+enum class DirectionState {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
 };
 
 class Direction {
@@ -65,26 +48,31 @@ class Direction {
         Direction() {
             dirX = 1;
             dirY = 0;
+            state = DirectionState::RIGHT;
         }
 
         void toUp() {
             dirX = 0;
             dirY = 1;
+            state = DirectionState::UP;
         }
 
         void toDown() {
             dirX = 0;
             dirY = -1;
+            state = DirectionState::DOWN;
         }
 
         void toLeft() {
             dirX = -1;
             dirY = 0;
+            state = DirectionState::LEFT;
         }
 
         void toRight() {
             dirX = 1;
             dirY = 0;
+            state = DirectionState::RIGHT;
         }
 
         void stop()
@@ -93,41 +81,22 @@ class Direction {
             dirY = 0;
         }
 
-        bool isToUp()
-        {
-            if (dirX == 1 && dirY == 0)
-                return true;
-
-            return false;
+        short getDirX() {
+            return dirX;
         }
 
-        bool isToDown()
-        {
-            if (dirX == 1 && dirY == 0)
-                return true;
-
-            return false;
+        short getDirY() {
+            return dirY;
         }
 
-        bool isToLeft()
-        {
-            if (dirX == 1 && dirY == 0)
-                return true;
-
-            return false;
-        }
-
-        bool isToRigth()
-        {
-            if (dirX == 1 && dirY == 0)
-                return true;
-
-            return false;
+        DirectionState getState() {
+            return state;
         }
         
     private:
         short dirX;
         short dirY;
+        DirectionState state;
 };
 
 class GameObject {
@@ -137,16 +106,16 @@ class GameObject {
             pos = p;
             direction = d;
         };
-        GameObject(GamePos p);
-        GameObject(Direction d);
-        GameObject();
 
         GamePos getPos()
         {
             return pos;
         }
 
-        static void draw();
+        Direction getDir()
+        {
+            return direction;
+        }
 
     protected:
         GamePos pos;
