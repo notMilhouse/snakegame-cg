@@ -200,5 +200,4 @@ class GameMap
         int sizeY;
         typedef GameObject*** Map;
         Map map;
-
 };

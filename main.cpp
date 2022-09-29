@@ -10,14 +10,18 @@ g++ *.cpp -o vai -lglut -lGL -lGLEW -lGLU
 void KeyboardManage(unsigned char key, int x, int y);
 void Timer(int value);
 void DrawManage();
-void Margem(int windowX, int windowY);
 void Initialize();
 void gameInitialize();
 
 GameObject apple;
-Snake* snake;
-GameMap* gamemap;
 
+Snake* snake = new Snake(
+                    GamePos(NUM_ATOM/2+1, NUM_ATOM/2), 
+                    Direction()
+                    );
+/*
+GameMap* gamemap = new GameMap(NUM_ATOM, NUM_ATOM);
+*/
 int main(int argc, char**argv)
 {
     //Cria um janela na tela
@@ -33,7 +37,7 @@ int main(int argc, char**argv)
     glutKeyboardFunc(KeyboardManage);
 
     //Frame 
-    glutTimerFunc(60, Timer, 1);
+    //glutTimerFunc(180, Timer, 1);
 
     glutDisplayFunc(DrawManage);
     Initialize();
@@ -44,20 +48,17 @@ int main(int argc, char**argv)
 
 void Initialize()
 {
-    glClearColor(1.0, 1.0, 1.0, 1.0);
-    glLineWidth(3.0);
-    gluOrtho2D(0.0, 500.0, 500.0, 0.0);
-
     displayInitialize();
-    void gameInitialize();
-
+    //gameInitialize();
+    //gamemap->addObject(&apple);
 }
 
 void DrawManage()
 {
-    glColor3f(0.0, 1.0, 0.0);
-    snake->draw(drawSquare);
     chess();
+    glColor3f(0.0, 1.0, 0.0); snake->draw(drawSquare);
+    //glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(1.0, 0.0, 0.0); apple.draw(drawSquare);
 }
 
 void KeyboardManage(unsigned char key, int x, int y)
@@ -83,10 +84,13 @@ void KeyboardManage(unsigned char key, int x, int y)
             snake->changeDirection(DirectionState::RIGHT);
             break;
     }
+
+    glutPostRedisplay();
 }
 
 void Timer(int value)
 {
+    /*
     GamePos nextPos = snake->getPosition(); 
     Direction direction = snake->getDirection();
     
@@ -99,12 +103,12 @@ void Timer(int value)
     {
         
     }
-
+    */
     snake->move();
     glutPostRedisplay();
     glutTimerFunc(180, Timer, value+1);
 }
-
+/*
 void gameInitialize()
 {
     gamemap = new GameMap(NUM_ATOM, NUM_ATOM);
@@ -115,3 +119,4 @@ void gameInitialize()
     
     gamemap->addObject(&apple);
 }
+*/

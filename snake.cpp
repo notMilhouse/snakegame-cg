@@ -67,7 +67,7 @@ public:
     void draw(void (*callback)(int x, int y))
     {
         BodyPart *current = tail;
-        GamePos pos;
+        
         while (current != nullptr)
         {
             if(current->getDir().getState() != DirectionState::STOP)
@@ -107,7 +107,6 @@ private:
         head->appendPart(part);
         head = part;
     }
-
 
     void removeTail()
     {
