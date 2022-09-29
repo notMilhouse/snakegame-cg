@@ -68,3 +68,8 @@ void KeyboardManage(unsigned char key, int x, int y)
             break;
     }
 }
+
+void Timer(int value)
+{
+    
+}

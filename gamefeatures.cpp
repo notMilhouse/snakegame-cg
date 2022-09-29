@@ -96,7 +96,7 @@ class Direction {
         DirectionState getState() {
             return state;
         }
-        
+
     private:
         short dirX;
         short dirY;
