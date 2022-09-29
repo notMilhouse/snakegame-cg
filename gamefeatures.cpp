@@ -23,12 +23,16 @@ class GamePos {
             return posY;
         }
 
-        void incrementX(int increment) {
+        GamePos* incrementX(int increment) {
             posX += increment;
+
+            return this;
         }
 
-        void incrementY(int increment) {
+        GamePos* incrementY(int increment) {
             posY += increment;
+            
+            return this;
         }
     
     private:

@@ -20,16 +20,16 @@ int main(int argc, char**argv)
     //---
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT  );
+    glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     glutInitWindowPosition(430, 130);
     glutCreateWindow("snake_game");
     //---
 
     //Passa infos do buffer do teclado para KeyboardManage
-    //glutKeyboardFunc(KeyboardManage);
+    glutKeyboardFunc(KeyboardManage);
 
     //Frame 
-    //glutTimerFunc(60, Timer, 1);
+    glutTimerFunc(60, Timer, 1);
 
     glutDisplayFunc(DrawManage);
     Initialize();
@@ -49,22 +49,22 @@ void KeyboardManage(unsigned char key, int x, int y)
     switch (key) {
         case 'w':
         case 'W':
-            snake->changeDirection(Direction());
+            snake->changeDirection(DirectionState::UP);
             break;
 
         case 's':
         case 'S':
-            snake->changeDirection(Direction());
+            snake->changeDirection(DirectionState::DOWN);
             break;
         
         case 'a':
         case 'A':
-            snake->changeDirection(Direction());
+            snake->changeDirection(DirectionState::LEFT);
             break;
         
         case 'd':
         case 'D':
-            snake->changeDirection(Direction());
+            snake->changeDirection(DirectionState::RIGHT);
             break;
     }
 }

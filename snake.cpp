@@ -13,7 +13,7 @@ public:
         return nextPart;
     }
 
-    void appendPart(BodyPart* n)
+    void appendPart(BodyPart *n)
     {
         nextPart = n;
     }
@@ -33,26 +33,41 @@ public:
 
     void move()
     {
-        BodyPart *aux = tail;
-        tail = tail->getNextPart();
-        delete aux;
+        addHead();
+        removeTail();
+    }
 
-        GamePos headCurrentPosition = head->getPos();
-        Direction headCurrentDirection = head->getDir();
-
-        aux = new BodyPart(headCurrentPosition, headCurrentDirection);
-        aux->appendPart(*head);
-        head = aux;
+    void changeDirection(DirectionState newState)
+    {
+        switch (newState)
+        {
+            case DirectionState::RIGHT:
+                head->getDir().toRight();
+                break;
+            case DirectionState::LEFT:
+                head->getDir().toLeft();
+                break;
+            case DirectionState::UP:
+                head->getDir().toUp();
+                break;
+            case DirectionState::DOWN:
+                head->getDir().toDown();
+                break;
+            
+            default:
+                break;
+        }
     }
 
     void draw(void (*callback)(int x, int y))
     {
-        BodyPart *current = head;
+        BodyPart *current = tail;
         GamePos pos;
-        while (current != 0)
+        while (current != nullptr)
         {
             pos = current->getPos();
             callback(pos.getX(), pos.getY());
+            current = current->getNextPart();
         }
     }
 
@@ -62,9 +77,34 @@ private:
 
     void addHead()
     {
-        BodyPart *part = new BodyPart(head->getPos(), head->getDir());
+        GamePos currentPos = head->getPos();
+        Direction currentDir = head->getDir();
+
+        GamePos* newPos = currentPos
+            .incrementX(head->getDir().getDirX())
+            ->incrementY(head->getDir().getDirY());
+        
+
+        BodyPart *part = new BodyPart(*newPos, currentDir);
 
         head->appendPart(part);
         head = part;
+    }
+
+
+    void removeTail()
+    {
+        BodyPart *aux = tail;
+
+        if (head == tail)
+        {
+            tail = head = nullptr;
+        }
+        else
+        {
+            tail = tail->getNextPart();
+        }
+
+        delete aux;
     }
 };
