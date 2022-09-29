@@ -44,7 +44,8 @@ enum class DirectionState {
     UP,
     DOWN,
     LEFT,
-    RIGHT
+    RIGHT,
+    STOP
 };
 
 class Direction {
@@ -83,6 +84,7 @@ class Direction {
         {
             dirX = 0;
             dirY = 0;
+            state = DirectionState::STOP;
         }
 
         short getDirX() {
@@ -111,6 +113,18 @@ class GameObject {
             direction = d;
         };
 
+        GameObject(GamePos p)
+        {
+            pos = p;
+            direction = Direction();
+        }
+        
+        GameObject()
+        {
+            pos = GamePos();
+            direction = Direction();
+        }
+
         GamePos getPos()
         {
             return pos;
@@ -121,7 +135,70 @@ class GameObject {
             return direction;
         }
 
+        void draw(void (*callback)(int x, int y))
+        {
+            callback(pos.getX(), pos.getY());
+        }
+
     protected:
         GamePos pos;
         Direction direction;
+};
+
+class GameMap
+{
+    public:
+        GameMap(int x, int y)
+        {
+            sizeX = x;
+            sizeY = y;
+
+            map = new GameObject**[x];
+            for(int i; i < x; i++)
+            {
+                map[i] = new GameObject*[y];
+                for (int j = 0; j < y; j++) {
+                    map[i][j] = nullptr;
+                }
+            }
+        }
+        
+        void addObject(GameObject* object)
+        {
+            GamePos pos = object->getPos();
+
+            map[pos.getX()][pos.getY()] = object;
+        }
+
+        void removeObject(int x, int y)
+        {
+            if(map[x][y] == nullptr)
+                return;
+
+            map[x][y] = nullptr;
+        }
+
+        void removeObject(GameObject *object)
+        {
+            GamePos pos = object->getPos();
+            map[pos.getX()][pos.getY()] = nullptr;
+        }
+
+        bool detectObject(int x, int y)
+        {      
+            return map[x][y] != nullptr;
+        }
+
+        bool detectObject(GameObject *object)
+        {
+            GamePos pos = object->getPos();
+            return map[pos.getX()][pos.getY()] == object;
+        }
+
+    private:
+        int sizeX;
+        int sizeY;
+        typedef GameObject*** Map;
+        Map map;
+
 };

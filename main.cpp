@@ -11,8 +11,12 @@ void KeyboardManage(unsigned char key, int x, int y);
 void Timer(int value);
 void DrawManage();
 void Margem(int windowX, int windowY);
+void Initialize();
+void gameInitialize();
 
+GameObject apple;
 Snake* snake;
+GameMap* gamemap;
 
 int main(int argc, char**argv)
 {
@@ -38,9 +42,21 @@ int main(int argc, char**argv)
     return 0;
 }
 
+void Initialize()
+{
+    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glLineWidth(3.0);
+    gluOrtho2D(0.0, 500.0, 500.0, 0.0);
+
+    displayInitialize();
+    void gameInitialize();
+
+}
+
 void DrawManage()
 {
-    //snake->draw();
+    glColor3f(0.0, 1.0, 0.0);
+    snake->draw(drawSquare);
     chess();
 }
 
@@ -71,5 +87,31 @@ void KeyboardManage(unsigned char key, int x, int y)
 
 void Timer(int value)
 {
+    GamePos nextPos = snake->getPosition(); 
+    Direction direction = snake->getDirection();
     
+    nextPos = *nextPos
+                 .incrementX(direction.getDirX())
+                ->incrementY(direction.getDirY());
+
+    //colisão
+    if(gamemap->detectObject(nextPos.getX(), nextPos.getY()))
+    {
+        
+    }
+
+    snake->move();
+    glutPostRedisplay();
+    glutTimerFunc(180, Timer, value+1);
+}
+
+void gameInitialize()
+{
+    gamemap = new GameMap(NUM_ATOM, NUM_ATOM);
+    snake = new Snake(
+                    GamePos(NUM_ATOM/2, NUM_ATOM/2), 
+                    Direction()
+                    );
+    
+    gamemap->addObject(&apple);
 }

@@ -59,16 +59,33 @@ public:
         }
     }
 
+    void consumeApple()
+    {
+
+    }
+
     void draw(void (*callback)(int x, int y))
     {
         BodyPart *current = tail;
         GamePos pos;
         while (current != nullptr)
         {
-            pos = current->getPos();
-            callback(pos.getX(), pos.getY());
+            if(current->getDir().getState() != DirectionState::STOP)
+            {
+                current->draw(callback);
+            }
             current = current->getNextPart();
         }
+    }
+
+    GamePos getPosition()
+    {
+        return head->getPos();
+    }
+
+    Direction getDirection()
+    {
+        return head->getDir();
     }
 
 private:

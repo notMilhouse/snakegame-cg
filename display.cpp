@@ -5,22 +5,17 @@
 
 int squareSide;
 int displaySide;
-int numAtom = 20;
 
-void Initialize()
+void displayInitialize()
 {
     displaySide = (WINDOW_HEIGHT > WINDOW_WIDTH) ? WINDOW_WIDTH : WINDOW_HEIGHT;
 
-    if(displaySide % numAtom != 0)
+    if(displaySide % NUM_ATOM != 0)
     {
-        displaySide -= displaySide % numAtom;
+        displaySide -= displaySide % NUM_ATOM;
     }
 
-    squareSide = displaySide/numAtom;
-
-    glClearColor(1.0, 1.0, 1.0, 1.0);
-    glLineWidth(3.0);
-    gluOrtho2D(0.0, 500.0, 500.0, 0.0);
+    squareSide = displaySide/NUM_ATOM;
 }
 
 void drawSquare(int x, int y)
@@ -40,9 +35,9 @@ void drawSquare(int x, int y)
 void chess()
 {
     int count = 0;
-    for(int i = 0; i < numAtom; i++)
+    for(int i = 0; i < NUM_ATOM; i++)
     {
-        for(int j = 0; j < numAtom; j++)
+        for(int j = 0; j < NUM_ATOM; j++)
         {
             if (count % 2 == 0) {
                 glColor3f(0.2, 0.2, 0.2);
